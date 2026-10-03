@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PrepAI — AI Technical Interview Preparation Agent & Mentor</title>
+  <meta name="description" content="Master your technical software engineering interviews with an adaptive AI agent. Practice conceptual, coding, and scenario-based questions with instant scoring, follow-ups, and personalized study plans.">
+  <meta name="keywords" content="AI interview prep, mock interview, coding interview, technical preparation, Java, Python, SQL, DSA, System Design, interview scoring">
+  <meta name="theme-color" content="#07090e">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./src/styles/main.css">
+</head>
+<body>
+
+  <!-- Top Sticky Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-wrapper" id="brandHomeBtn">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+            <circle cx="12" cy="12" r="1"></circle>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>PrepAI</h1>
+          <div class="brand-tagline">AI Interview Preparation Agent</div>
+        </div>
+      </div>
+
+      <nav class="nav-tabs" aria-label="Main Navigation">
+        <button class="nav-tab-btn active" data-view="interview-view" id="navBtnInterview">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+          Interview Room
+        </button>
+        <button class="nav-tab-btn" data-view="analytics-view" id="navBtnAnalytics">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          Progress & Weak Areas
+        </button>
+        <button class="nav-tab-btn" data-view="studyplan-view" id="navBtnStudyPlan">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+          Study Plan
+        </button>
+        <button class="nav-tab-btn" data-view="explorer-view" id="navBtnExplorer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          Question Bank
+        </button>
+        <button class="nav-tab-btn" data-view="profile-view" id="navBtnProfile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Profile & Settings
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <div class="agent-status-badge" id="agentStatusBadge">
+          <div class="status-pulse"></div>
+          <span>AI Agent Ready</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Body -->
+  <main class="app-main">
+
+    <!-- ================= VIEW 1: INTERVIEW STUDIO ================= -->
+    <section class="view-section active" id="interview-view">
+      
+      <!-- Candidate Ribbon Summary (Section 2) -->
+      <div class="candidate-ribbon">
+        <div class="candidate-profile-summary">
+          <div class="candidate-avatar" id="candidateInitials">AR</div>
+          <div class="candidate-details">
+            <h3 id="candidateNameDisplay">Alex Rivera</h3>
+            <p id="candidateRoleDisplay">Full Stack Engineer • Intermediate</p>
+          </div>
+        </div>
+
+        <div class="meta-tags">
+          <span class="meta-tag highlight" id="candidateTechTag">Java</span>
+          <span class="meta-tag" id="candidateExpTag">Intermediate</span>
+          <span class="meta-tag difficulty-Intermediate" id="candidateDiffTag">Adaptive: Intermediate</span>
+        </div>
+      </div>
+
+      <!-- Interview Modes Selector (Section 3) -->
+      <div class="modes-bar" role="tablist">
+        <div class="mode-card active" data-mode="practice" id="modeCardPractice">
+          <div class="mode-icon">🎯</div>
+          <div class="mode-info">
+            <h4>Practice Mode</h4>
+            <p>One question at a time. Instant feedback, scoring, and smart follow-up questions.</p>
+          </div>
+        </div>
+
+        <div class="mode-card" data-mode="mock" id="modeCardMock">
+          <div class="mode-icon">⏱️</div>
+          <div class="mode-info">
+            <h4>Mock Interview Mode</h4>
+            <p>Realistic 5-question sequential interview. Comprehensive scorecard report at end.</p>
+          </div>
+        </div>
+
+        <div class="mode-card" data-mode="topic" id="modeCardTopic">
+          <div class="mode-icon">🔬</div>
+          <div class="mode-info">
+            <h4>Topic Practice Mode</h4>
+            <p>Drill-down into specific technical domains like OOP, Collections, or Async.</p>
+          </div>
+        </div>
+
+        <div class="mode-card" data-mode="weak_area" id="modeCardWeak">
+          <div class="mode-icon">🩹</div>
+          <div class="mode-info">
+            <h4>Weak Area Mode</h4>
+            <p>AI targets your recorded weak points to eliminate knowledge gaps.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Interview Workspace -->
+      <div class="interview-layout">
+        <div class="interview-primary-column">
+
+          <!-- Question Display (Section 4 & 13) -->
+          <article class="question-card" id="questionCard">
+            <div class="question-header">
+              <div class="question-breadcrumbs">
+                <span id="qBreadcrumbTech">Java</span>
+                <span>/</span>
+                <span id="qBreadcrumbTopic">OOP › Inheritance</span>
+              </div>
+              <div style="display:flex; gap:0.5rem;">
+                <span class="question-type-badge" id="qTypeBadge">Conceptual</span>
+                <span class="meta-tag difficulty-Intermediate" id="qDifficultyBadge">Intermediate</span>
+              </div>
+            </div>
+
+            <h2 class="question-title" id="qTitle">
+              Loading technical interview question...
+            </h2>
+
+            <div class="question-context" id="qContext"></div>
+
+            <!-- Coding Challenge Container (Section 14) -->
+            <div class="coding-container" id="codingContainer" style="display:none;">
+              <div class="coding-section-title">Problem Statement & Constraints</div>
+              <p style="font-size:0.9rem; margin-bottom:0.75rem; color:#e2e8f0;" id="codingProblemStatement"></p>
+              <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.75rem;">
+                <strong>Constraints:</strong> <span id="codingConstraints"></span>
+              </div>
+              <div class="coding-section-title">Examples</div>
+              <div id="codingExamples"></div>
+            </div>
+
+            <div class="question-actions-bar">
+              <button class="btn-icon-text" id="btnSpeakQuestion" title="Read Question Aloud">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                <span>Read Question</span>
+              </button>
+
+              <div class="audio-waves" id="audioWaves">
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+              </div>
+
+              <div style="display:flex; gap:0.5rem;">
+                <button class="btn-icon-text" id="btnHint">
+                  <span>💡 Hint</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Candidate Response Studio -->
+          <div class="response-card">
+            <div class="response-card-header">
+              <h3 style="font-family:var(--font-heading); font-size:1.05rem; font-weight:700;">Your Response</h3>
+              <div class="response-mode-toggle">
+                <button class="response-mode-btn active" id="btnModeText">Text Explanation</button>
+                <button class="response-mode-btn" id="btnModeCode">Code Editor</button>
+              </div>
+            </div>
+
+            <div class="editor-wrapper">
+              <textarea 
+                id="candidateAnswerInput" 
+                class="candidate-textarea" 
+                placeholder="Type or speak your answer here. Explain your technical reasoning, internal mechanics, and real-world examples..."
+              ></textarea>
+            </div>
+
+            <div class="editor-footer">
+              <div style="display:flex; gap:1rem;">
+                <span id="wordCountDisplay">0 words</span>
+                <span id="charCountDisplay">0 chars</span>
+              </div>
+              <button class="btn-icon-text" id="btnClearAnswer" style="padding:0.2rem 0.6rem; font-size:0.75rem;">Clear</button>
+            </div>
+
+            <div class="response-actions">
+              <button class="btn-mic" id="btnMicDictate" title="Speak Answer (Speech to Text)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+              </button>
+
+              <div style="display:flex; gap:0.75rem;">
+                <button class="btn-primary" id="btnSubmitAnswer">
+                  <span>Submit Answer</span>
+                  <span>➔</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Evaluation Card (Section 6, 7 & 8) -->
+          <article class="evaluation-card" id="evaluationSection" style="display:none;">
+            <div class="eval-top-bar">
+              <div class="score-display-wrapper">
+                <div class="radial-score-gauge score-green" id="evalScoreGauge" style="--score-pct: 80;">
+                  <span id="evalScoreText">8/10</span>
+                </div>
+                <div class="score-text-details">
+                  <h3>Evaluation Result</h3>
+                  <p id="evalVerdictText" class="text-emerald">High technical competence demonstrated</p>
+                </div>
+              </div>
+
+              <div>
+                <button class="btn-primary" id="btnTakeFollowUp" style="display:none; background:linear-gradient(135deg, #f59e0b, #d97706);">
+                  Take Follow-Up Question ➔
+                </button>
+                <button class="btn-primary" id="btnNextQuestion" style="display:none;">
+                  Next Question ➔
+                </button>
+              </div>
+            </div>
+
+            <div class="next-action-banner" id="nextActionBanner">
+              <div id="nextActionText">Adaptive progression updated.</div>
+            </div>
+
+            <div class="eval-grid">
+              <div class="eval-box well">
+                <div class="eval-box-title">
+                  <span>🟢</span>
+                  <span>What You Did Well</span>
+                </div>
+                <ul class="eval-list" id="evalWellList"></ul>
+              </div>
+
+              <div class="eval-box missing">
+                <div class="eval-box-title">
+                  <span>🟡</span>
+                  <span>What Was Missing</span>
+                </div>
+                <ul class="eval-list" id="evalMissingList"></ul>
+              </div>
+
+              <div class="eval-box mistakes">
+                <div class="eval-box-title">
+                  <span>🔴</span>
+                  <span>Mistakes & Misconceptions</span>
+                </div>
+                <ul class="eval-list" id="evalMistakesList"></ul>
+              </div>
+
+              <div class="eval-box advice">
+                <div class="eval-box-title">
+                  <span>💡</span>
+                  <span>Practical Interview Improvement</span>
+                </div>
+                <p style="font-size:0.85rem; color:#cbd5e1; line-height:1.5;" id="evalImprovementText"></p>
+              </div>
+            </div>
+
+            <div class="ideal-answer-box">
+              <div class="ideal-answer-header">
+                <h4>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  Concise Interview-Ready Model Answer
+                </h4>
+              </div>
+              <div class="ideal-answer-content" id="evalIdealAnswerText"></div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Sidebar: AI Persona & Tool Execution Log (Section 11 & 12) -->
+        <aside class="interviewer-sidebar">
+          <div class="persona-card">
+            <div class="interviewer-avatar-wrapper">
+              <div class="interviewer-avatar">🤖</div>
+            </div>
+            <h3 class="persona-name">Agent Astra</h3>
+            <p class="persona-role">Staff Technical Interviewer & Mentor</p>
+            <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.4;">
+              Evaluating candidates against Big Tech engineering standards with adaptive difficulty.
+            </p>
+          </div>
+
+          <!-- Tools Console (Section 11 & 12) -->
+          <div class="tools-console-card">
+            <div class="tools-console-header">
+              <h4>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                AI Agent Tools Active
+              </h4>
+            </div>
+            <div class="tool-logs-list" id="toolLogsList"></div>
+          </div>
+        </aside>
+      </div>
+
+    </section>
+
+    <!-- ================= VIEW 2: PROGRESS & WEAK TOPICS ================= -->
+    <section class="view-section" id="analytics-view">
+      <div style="margin-bottom:1.5rem;">
+        <h2 style="font-family:var(--font-heading); font-size:1.6rem; color:#fff;">Candidate Performance & Topic Mastery</h2>
+        <p style="font-size:0.88rem; color:var(--text-muted);">Real-time tracking of strengths, weak areas, and interview readiness index.</p>
+      </div>
+
+      <div class="stats-overview-grid">
+        <div class="stat-metric-card">
+          <div class="stat-metric-label">Average Score</div>
+          <div class="stat-metric-value" id="statAvgScore">0.0 <span>/ 10</span></div>
+        </div>
+
+        <div class="stat-metric-card">
+          <div class="stat-metric-label">Questions Evaluated</div>
+          <div class="stat-metric-value" id="statTotalAnswered">0</div>
+        </div>
+
+        <div class="stat-metric-card">
+          <div class="stat-metric-label">Interview Readiness</div>
+          <div class="stat-metric-value" id="statReadiness">0%</div>
+        </div>
+      </div>
+
+      <!-- Topic Mastery Matrix (Section 9) -->
+      <div class="topic-mastery-grid">
+        <div class="mastery-card strong">
+          <div class="mastery-card-header">
+            <span>🟢</span>
+            <span>Strong Topics (Score ≥ 7.0)</span>
+          </div>
+          <div class="topics-pill-container" id="strongTopicsList"></div>
+        </div>
+
+        <div class="mastery-card weak">
+          <div class="mastery-card-header">
+            <span>🔴</span>
+            <span>Weak Topics Targeted (Score &lt; 6.0)</span>
+          </div>
+          <div class="topics-pill-container" id="weakTopicsList"></div>
+        </div>
+      </div>
+
+      <!-- History Timeline -->
+      <div class="history-card">
+        <div class="history-card-header">
+          <h3 style="font-family:var(--font-heading); font-size:1.1rem; color:#fff;">Recent Question Performance</h3>
+          <button class="btn-secondary" id="btnClearHistory" style="padding:0.35rem 0.75rem; font-size:0.75rem;">Clear Data</button>
+        </div>
+        <div class="history-list" id="historyList"></div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 3: PERSONALIZED STUDY PLAN ================= -->
+    <section class="view-section" id="studyplan-view">
+      <div style="margin-bottom:1.5rem;">
+        <h2 style="font-family:var(--font-heading); font-size:1.6rem; color:#fff;">Personalized Study Plan Generator</h2>
+        <p style="font-size:0.88rem; color:var(--text-muted);">Generates customized day-by-day technical schedules prioritizing your recorded weak areas.</p>
+      </div>
+
+      <div class="study-plan-generator-card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="planDaysInput">Study Duration</label>
+            <select id="planDaysInput" class="form-control">
+              <option value="3">3 Days (Crash Course)</option>
+              <option value="5">5 Days (Targeted Sprint)</option>
+              <option value="7" selected>7 Days (Standard Preparation)</option>
+              <option value="14">14 Days (Comprehensive Mastery)</option>
+              <option value="30">30 Days (Full Tech Overhaul)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="planDateInput">Target Interview Date</label>
+            <input type="date" id="planDateInput" class="form-control">
+          </div>
+        </div>
+
+        <button class="btn-primary" id="btnGeneratePlan">
+          <span>⚡ Generate Personalized Plan</span>
+        </button>
+      </div>
+
+      <div class="study-plan-output" id="studyPlanOutput" style="display:none;"></div>
+    </section>
+
+    <!-- ================= VIEW 4: QUESTION EXPLORER ================= -->
+    <section class="view-section" id="explorer-view">
+      <div style="margin-bottom:1.5rem;">
+        <h2 style="font-family:var(--font-heading); font-size:1.6rem; color:#fff;">Question Bank & Topics Explorer</h2>
+        <p style="font-size:0.88rem; color:var(--text-muted);">Explore technical questions across Java, Python, SQL, REST APIs, OOP, and Data Structures.</p>
+      </div>
+
+      <div class="explorer-search-bar">
+        <input type="text" id="explorerSearch" class="form-control" style="flex:2;" placeholder="Search questions, topics, or keywords...">
+
+        <select id="explorerTechFilter" class="form-control" style="flex:1;">
+          <option value="All">All Technologies</option>
+          <option value="Java">Java</option>
+          <option value="Python">Python</option>
+          <option value="SQL">SQL</option>
+          <option value="Databases">Databases</option>
+          <option value="JavaScript">JavaScript</option>
+          <option value="HTML">HTML</option>
+          <option value="CSS">CSS</option>
+          <option value="Spring Boot">Spring Boot</option>
+          <option value="REST APIs">REST APIs</option>
+          <option value="OOP">OOP</option>
+          <option value="Data Structures and Algorithms">DSA</option>
+        </select>
+
+        <select id="explorerDiffFilter" class="form-control" style="flex:1;">
+          <option value="All">All Difficulties</option>
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+        </select>
+
+        <select id="explorerTypeFilter" class="form-control" style="flex:1;">
+          <option value="All">All Question Types</option>
+          <option value="Conceptual">Conceptual</option>
+          <option value="Technical">Technical</option>
+          <option value="Scenario-based">Scenario-based</option>
+          <option value="Coding">Coding Challenge</option>
+        </select>
+      </div>
+
+      <div class="explorer-grid" id="explorerGrid"></div>
+    </section>
+
+    <!-- ================= VIEW 5: PROFILE & SETTINGS ================= -->
+    <section class="view-section" id="profile-view">
+      <div style="margin-bottom:1.5rem;">
+        <h2 style="font-family:var(--font-heading); font-size:1.6rem; color:#fff;">Candidate Information & AI Configuration</h2>
+        <p style="font-size:0.88rem; color:var(--text-muted);">Configure candidate profile, target roles, and optional Gemini live AI API integration.</p>
+      </div>
+
+      <div class="study-plan-generator-card">
+        <form id="profileForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="inputCandName">Candidate Name</label>
+              <input type="text" id="inputCandName" class="form-control" value="Alex Rivera">
+            </div>
+
+            <div class="form-group">
+              <label for="selectTargetRole">Target Role</label>
+              <select id="selectTargetRole" class="form-control">
+                <option value="Full Stack Engineer">Full Stack Engineer</option>
+                <option value="Frontend Engineer">Frontend Engineer</option>
+                <option value="Backend Engineer">Backend Engineer</option>
+                <option value="Data Engineer">Data Engineer</option>
+                <option value="Software Engineer (SDE-1)">Software Engineer (SDE-1 / Fresher)</option>
+                <option value="Senior Software Engineer">Senior Software Engineer</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="selectTech">Primary Technology</label>
+              <select id="selectTech" class="form-control">
+                <option value="Java">Java</option>
+                <option value="Python">Python</option>
+                <option value="SQL">SQL</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Spring Boot">Spring Boot</option>
+                <option value="Databases">Databases</option>
+                <option value="REST APIs">REST APIs</option>
+                <option value="OOP">OOP</option>
+                <option value="Data Structures and Algorithms">Data Structures and Algorithms</option>
+                <option value="All">All / Mixed Stack</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="selectExp">Experience Level</label>
+              <select id="selectExp" class="form-control">
+                <option value="Beginner">Beginner / Fresher (0-1 yr)</option>
+                <option value="Intermediate">Intermediate (1-3 yrs)</option>
+                <option value="Senior">Senior (3+ yrs)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="selectDiff">Initial Difficulty</label>
+              <select id="selectDiff" class="form-control">
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="selectInterviewType">Primary Interview Focus</label>
+              <select id="selectInterviewType" class="form-control">
+                <option value="Conceptual">Conceptual Questions</option>
+                <option value="Technical">Technical In-Depth</option>
+                <option value="Scenario-based">Scenario-based & System</option>
+                <option value="Coding">Coding Challenges</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.25); border:1px solid var(--border-subtle); padding:1.25rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+              <label for="inputApiKey" style="margin-bottom:0; font-weight:700; color:#a5b4fc;">
+                Google Gemini API Key (Optional Live LLM Mode)
+              </label>
+              <span class="meta-tag" style="background:rgba(16,185,129,0.1); color:#34d399;">Offline Engine Active by Default</span>
+            </div>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.75rem;">
+              The app includes a built-in semantic & rubric evaluator that works 100% offline with zero latency. If you provide a Gemini API key, evaluations will also utilize live Google Gemini 1.5/2.0 Flash calls.
+            </p>
+            <div style="display:flex; gap:0.75rem;">
+              <input type="password" id="inputApiKey" class="form-control" placeholder="AIzaSy...">
+              <button type="button" class="btn-secondary" id="btnTestApiKey">Test Connection</button>
+            </div>
+            <div id="apiKeyStatus" style="font-size:0.82rem; margin-top:0.5rem;"></div>
+          </div>
+
+          <button type="submit" class="btn-primary" id="btnSaveProfile">
+            <span>💾 Save Profile & Settings</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mock Interview Scorecard Modal -->
+  <div class="modal-overlay" id="mockModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 style="font-family:var(--font-heading); color:#fff;">Executive Interview Scorecard</h3>
+        <button class="modal-close-btn" id="btnCloseMockModal">&times;</button>
+      </div>
+      <div id="mockModalContent"></div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript App Entry -->
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
